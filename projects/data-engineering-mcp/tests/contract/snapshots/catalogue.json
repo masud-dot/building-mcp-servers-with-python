@@ -1,0 +1,359 @@
+{
+  "delete_pipeline_run": {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "readOnlyHint": false
+    },
+    "description": "Delete one pipeline run, after confirmation.\n\n        The user is asked to retype the identifier. Nothing is\n        removed unless they do. Only pipeline runs can be\n        deleted; no other table is reachable.\n        ",
+    "input_schema": {
+      "properties": {
+        "run_id": {
+          "description": "Identifier of the run.",
+          "minimum": 1,
+          "title": "Run Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "run_id"
+      ],
+      "title": "delete_pipeline_runArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "description": "What was removed.",
+      "properties": {
+        "deleted": {
+          "description": "True when a row was actually removed.",
+          "title": "Deleted",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "The run that was deleted.",
+          "title": "Id",
+          "type": "integer"
+        },
+        "pipeline": {
+          "description": "Its pipeline name.",
+          "title": "Pipeline",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "pipeline",
+        "deleted"
+      ],
+      "title": "DeletedRun",
+      "type": "object"
+    }
+  },
+  "describe_table": {
+    "annotations": {
+      "idempotentHint": true,
+      "readOnlyHint": true
+    },
+    "description": "Return the columns and types of one table.\n\n        Call this before sample_table so you know what the\n        columns are.\n        ",
+    "input_schema": {
+      "properties": {
+        "table": {
+          "description": "Qualified name from list_tables, such as analytics.orders.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "table"
+      ],
+      "title": "describe_tableArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "$defs": {
+        "Column": {
+          "description": "One column of a table.",
+          "properties": {
+            "name": {
+              "description": "Column name.",
+              "title": "Name",
+              "type": "string"
+            },
+            "nullable": {
+              "description": "Whether NULL is permitted.",
+              "title": "Nullable",
+              "type": "boolean"
+            },
+            "type": {
+              "description": "SQL type, as the database reports it.",
+              "title": "Type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "nullable"
+          ],
+          "title": "Column",
+          "type": "object"
+        }
+      },
+      "description": "The shape of one table.",
+      "properties": {
+        "columns": {
+          "description": "Columns, in order.",
+          "items": {
+            "$ref": "#/$defs/Column"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "schema_name": {
+          "description": "Schema the table lives in.",
+          "title": "Schema Name",
+          "type": "string"
+        },
+        "table": {
+          "description": "Table name.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_name",
+        "table",
+        "columns"
+      ],
+      "title": "TableSchema",
+      "type": "object"
+    }
+  },
+  "get_scan_result": {
+    "annotations": {
+      "idempotentHint": true,
+      "readOnlyHint": true
+    },
+    "description": "Retrieve a scan by its handle.",
+    "input_schema": {
+      "properties": {
+        "handle": {
+          "description": "Handle from start_quality_scan.",
+          "maxLength": 64,
+          "minLength": 8,
+          "title": "Handle",
+          "type": "string"
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "title": "get_scan_resultArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "description": "A finished, or still running, scan.",
+      "properties": {
+        "handle": {
+          "description": "The handle you asked for.",
+          "title": "Handle",
+          "type": "string"
+        },
+        "null_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Null count per column, when complete.",
+          "title": "Null Counts"
+        },
+        "rows_seen": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Rows examined, when complete.",
+          "title": "Rows Seen"
+        },
+        "status": {
+          "description": "running, or complete.",
+          "title": "Status",
+          "type": "string"
+        },
+        "table": {
+          "description": "The table scanned.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "handle",
+        "table",
+        "status"
+      ],
+      "title": "ScanReport",
+      "type": "object"
+    }
+  },
+  "list_tables": {
+    "annotations": {
+      "idempotentHint": true,
+      "readOnlyHint": true
+    },
+    "description": "List the tables this server can read.\n\n        Only these tables are available. Anything else is\n        refused, including tables that exist in the database.\n        ",
+    "input_schema": {
+      "properties": {},
+      "title": "list_tablesArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "properties": {
+        "result": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Result",
+          "type": "array"
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "title": "list_tablesOutput",
+      "type": "object"
+    }
+  },
+  "sample_table": {
+    "annotations": {
+      "idempotentHint": true,
+      "readOnlyHint": true
+    },
+    "description": "Return a sample of rows from one table.\n\n        Rows are capped. When truncated is true, more rows\n        matched than were returned.\n        ",
+    "input_schema": {
+      "properties": {
+        "limit": {
+          "default": 20,
+          "description": "Rows to return, 1 to 200.",
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "table": {
+          "description": "Qualified name from list_tables.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "table"
+      ],
+      "title": "sample_tableArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "description": "Rows returned by a bounded query.",
+      "properties": {
+        "columns": {
+          "description": "Column names, in order.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "elapsed_ms": {
+          "description": "How long the query took.",
+          "title": "Elapsed Ms",
+          "type": "integer"
+        },
+        "returned": {
+          "description": "How many rows are here.",
+          "title": "Returned",
+          "type": "integer"
+        },
+        "rows": {
+          "description": "Rows as text, stringified for display.",
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "truncated": {
+          "description": "True when the row cap stopped more rows being returned. Narrow the filter or raise limit.",
+          "title": "Truncated",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "columns",
+        "rows",
+        "returned",
+        "truncated",
+        "elapsed_ms"
+      ],
+      "title": "QueryResult",
+      "type": "object"
+    }
+  },
+  "start_quality_scan": {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "readOnlyHint": false
+    },
+    "description": "Start a data-quality scan and return a handle.\n\n        The scan may outlive this call. Come back with\n        get_scan_result, which any instance of this server can\n        answer.\n        ",
+    "input_schema": {
+      "properties": {
+        "table": {
+          "description": "Qualified name from list_tables.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "table"
+      ],
+      "title": "start_quality_scanArguments",
+      "type": "object"
+    },
+    "output_schema": {
+      "description": "What a caller needs to come back for the result.",
+      "properties": {
+        "handle": {
+          "description": "Pass this to get_scan_result. Valid for one hour.",
+          "title": "Handle",
+          "type": "string"
+        },
+        "table": {
+          "description": "The table being scanned.",
+          "title": "Table",
+          "type": "string"
+        }
+      },
+      "required": [
+        "handle",
+        "table"
+      ],
+      "title": "ScanStarted",
+      "type": "object"
+    }
+  }
+}

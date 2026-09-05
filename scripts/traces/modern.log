@@ -1,0 +1,161 @@
+--> request  id=1 server/discover
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "server/discover",
+      "params": {
+        "_meta": {
+          "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+          "io.modelcontextprotocol/clientInfo": {
+            "name": "mcp",
+            "version": "0.1.0"
+          },
+          "io.modelcontextprotocol/clientCapabilities": {}
+        }
+      }
+    }
+<-- response id=1 [complete]
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "cacheScope": "private",
+        "capabilities": {
+          "prompts": {
+            "listChanged": true
+          },
+          "resources": {
+            "listChanged": true,
+            "subscribe": true
+          },
+          "tools": {
+            "listChanged": true
+          }
+        },
+        "resultType": "complete",
+        "supportedVersions": [
+          "2026-07-28"
+        ],
+        "ttlMs": 0,
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "support",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+--> request  id=2 tools/list
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {
+        "_meta": {
+          "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+          "io.modelcontextprotocol/clientInfo": {
+            "name": "mcp",
+            "version": "0.1.0"
+          },
+          "io.modelcontextprotocol/clientCapabilities": {}
+        }
+      }
+    }
+<-- response id=2 [complete]
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "cacheScope": "private",
+        "resultType": "complete",
+        "tools": [
+          {
+            "description": "Look up a support ticket by its identifier.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "ticket_id": {
+                  "title": "Ticket Id",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ticket_id"
+              ],
+              "title": "get_ticketArguments"
+            },
+            "name": "get_ticket",
+            "outputSchema": {
+              "properties": {
+                "id": {
+                  "title": "Id",
+                  "type": "string"
+                },
+                "status": {
+                  "title": "Status",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "status"
+              ],
+              "title": "Ticket",
+              "type": "object"
+            }
+          }
+        ],
+        "ttlMs": 0,
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "support",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }
+--> request  id=3 tools/call
+    {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "method": "tools/call",
+      "params": {
+        "name": "get_ticket",
+        "arguments": {
+          "ticket_id": "4471"
+        },
+        "_meta": {
+          "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+          "io.modelcontextprotocol/clientInfo": {
+            "name": "mcp",
+            "version": "0.1.0"
+          },
+          "io.modelcontextprotocol/clientCapabilities": {}
+        }
+      }
+    }
+<-- response id=3 [complete]
+    {
+      "jsonrpc": "2.0",
+      "id": 3,
+      "result": {
+        "content": [
+          {
+            "text": "{\n  \"id\": \"4471\",\n  \"status\": \"open\"\n}",
+            "type": "text"
+          }
+        ],
+        "isError": false,
+        "resultType": "complete",
+        "structuredContent": {
+          "id": "4471",
+          "status": "open"
+        },
+        "_meta": {
+          "io.modelcontextprotocol/serverInfo": {
+            "name": "support",
+            "version": "1.0.0"
+          }
+        }
+      }
+    }

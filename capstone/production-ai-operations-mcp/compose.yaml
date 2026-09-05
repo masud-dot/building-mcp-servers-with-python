@@ -1,0 +1,36 @@
+# Local services for the capstone.
+#
+#   docker compose up -d aiops-db
+#   psql "$AIOPS_DSN" -f sql/001-schema.sql
+#
+services:
+  aiops-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: aiops
+      POSTGRES_USER: postgres
+      # Local development only. The server never connects as
+      # this user; it uses the two narrow roles created by
+      # sql/001-schema.sql.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aiops"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Stands in for the monitoring API, so nothing here needs a
+  # vendor account. Not required by the test suite, which
+  # injects a mock transport instead.
+  monitoring-stub:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - ./stub:/app/stub:ro
+    command: >
+      sh -c "pip install --quiet starlette uvicorn &&
+             python stub/monitoring.py"
+    ports:
+      - "8955:8955"

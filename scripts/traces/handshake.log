@@ -1,0 +1,99 @@
+--> request  id=1 initialize
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "method": "initialize",
+      "params": {
+        "protocolVersion": "2025-11-25",
+        "capabilities": {},
+        "clientInfo": {
+          "name": "mcp",
+          "version": "0.1.0"
+        },
+        "_meta": {}
+      }
+    }
+<-- response id=1
+    {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "result": {
+        "capabilities": {
+          "experimental": {},
+          "prompts": {
+            "listChanged": false
+          },
+          "resources": {
+            "listChanged": false,
+            "subscribe": false
+          },
+          "tools": {
+            "listChanged": false
+          }
+        },
+        "protocolVersion": "2025-11-25",
+        "serverInfo": {
+          "name": "support",
+          "version": "1.0.0"
+        }
+      }
+    }
+negotiated: 2025-11-25
+--> notify   notifications/initialized
+    {
+      "jsonrpc": "2.0",
+      "method": "notifications/initialized"
+    }
+--> request  id=2 tools/list
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "method": "tools/list",
+      "params": {
+        "_meta": {}
+      }
+    }
+<-- response id=2
+    {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "result": {
+        "tools": [
+          {
+            "description": "Look up a support ticket by its identifier.",
+            "inputSchema": {
+              "properties": {
+                "ticket_id": {
+                  "title": "Ticket Id",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ticket_id"
+              ],
+              "type": "object",
+              "title": "get_ticketArguments"
+            },
+            "name": "get_ticket",
+            "outputSchema": {
+              "properties": {
+                "id": {
+                  "title": "Id",
+                  "type": "string"
+                },
+                "status": {
+                  "title": "Status",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "status"
+              ],
+              "type": "object",
+              "title": "Ticket"
+            }
+          }
+        ]
+      }
+    }

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Secrets — .env.example is committed, .env never is
+.env
+*.pem
+*.key
+credentials.json
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Runtime output
+*.log
+# ...but the captured protocol traces from Chapter 4 are
+# reference material and must be committed.
+!scripts/traces/*.log
+*.sqlite
+*.db
