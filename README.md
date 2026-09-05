@@ -32,7 +32,7 @@ Python developers building MCP servers that other people will depend on. You sho
 
 ```bash
 # 1. Get the code
-git clone <repository-url> building-mcp-servers-with-python
+git clone https://github.com/masud-dot/building-mcp-servers-with-python building-mcp-servers-with-python
 cd building-mcp-servers-with-python
 
 # 2. Check your environment matches the book
